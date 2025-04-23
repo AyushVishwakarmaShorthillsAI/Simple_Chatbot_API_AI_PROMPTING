@@ -32,19 +32,19 @@
   </head>
   <body>
     <div style="padding: 20px;">
-        <div class="container">
+      <div class="container">
         <h2>Free ChatBot (Cohere API)</h2>
         <div class="form-group">
-            <input
+          <input
             type="text"
             class="form-control"
             id="userInput"
             placeholder="Enter your question"
-            />
+          />
         </div>
         <button class="btn btn-success" onclick="sendMessage()">Ask!</button>
         <div id="response"></div>
-        </div>
+      </div>
     </div>
 
     <script>
@@ -57,35 +57,32 @@
         const responseDiv = document.getElementById('response');
 
         if (!input.trim()) {
-            responseDiv.innerHTML = 'Please enter a message.';
-            return;
+          responseDiv.innerHTML = 'Please enter a message.';
+          return;
         }
 
         responseDiv.innerHTML = 'Loading...';
 
         try {
-            const res = await fetch('http://localhost:5000/api/chat', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ message: input }),
-            });
-            
-            const data = await res.json();
-            console.log(data);
+          const res = await fetch('http://localhost:5000/api/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: input }),
+          });
 
-            const markdownText =
+          const data = await res.json();
+          const markdownText =
             data?.text || data?.message?.content?.[0]?.text || 'No response received.';
 
-            responseDiv.innerHTML = marked.parse(markdownText);
-
-            document.getElementById('userInput').value = '';
+          responseDiv.innerHTML = marked.parse(markdownText);
+          document.getElementById('userInput').value = '';
         } catch (err) {
-            console.error(err);
-            responseDiv.innerHTML = 'Error: ' + err.message;
+          console.error(err);
+          responseDiv.innerHTML = 'Error: ' + err.message;
         }
-        }
+      }
     </script>
   </body>
 </html>
